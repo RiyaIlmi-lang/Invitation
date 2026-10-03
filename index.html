@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Magical Journey</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Georgia", serif;
+}
+
+.opening {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: #f7eee9;
+}
+
+/* KASTIL */
+.castle {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: castleZoom 12s ease-in-out infinite alternate;
+}
+
+@keyframes castleZoom {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.06);
+    }
+}
+
+/* LAPISAN CAHAYA */
+.magic-light {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(
+            circle at 50% 55%,
+            rgba(255,235,190,.55),
+            rgba(255,255,255,0) 45%
+        );
+    animation: lightPulse 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes lightPulse {
+    0%,100% { opacity: .45; }
+    50% { opacity: .9; }
+}
+
+/* GERBANG */
+.gate-wrapper {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1200px;
+}
+
+.gate {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+        transform 2.2s cubic-bezier(.7,0,.2,1),
+        opacity 1.5s ease;
+    transform-origin: center;
+}
+
+/* BELAH GERBANG */
+.gate-left {
+    clip-path: inset(0 50% 0 0);
+}
+
+.gate-right {
+    clip-path: inset(0 0 0 50%);
+}
+
+.opening.open .gate-left {
+    transform: translateX(-55%) rotateY(18deg);
+}
+
+.opening.open .gate-right {
+    transform: translateX(55%) rotateY(-18deg);
+}
+
+/* CAHAYA SAAT TERBUKA */
+.portal-light {
+    position: absolute;
+    width: 10px;
+    height: 100%;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    background: rgba(255,225,155,.9);
+    box-shadow:
+        0 0 30px 15px rgba(255,220,150,.7),
+        0 0 100px 50px rgba(255,230,180,.45);
+    opacity: 0;
+    transition: opacity .5s ease 1.2s;
+}
+
+.opening.open .portal-light {
+    opacity: 1;
+}
+
+/* TEKS */
+.intro {
+    position: absolute;
+    z-index: 10;
+    top: 16%;
+    width: 100%;
+    text-align: center;
+    color: #fffdf8;
+    text-shadow:
+        0 2px 8px rgba(75,45,25,.6),
+        0 0 18px rgba(255,220,160,.7);
+    transition:
+        opacity 1s ease,
+        transform 1s ease;
+}
+
+.intro small {
+    display: block;
+    font-size: clamp(14px, 3vw, 22px);
+    letter-spacing: 4px;
+    font-style: italic;
+    animation: fadeText 2.5s ease forwards;
+}
+
+@keyframes fadeText {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* TOMBOL */
+.open-button {
+    position: absolute;
+    z-index: 20;
+    left: 50%;
+    bottom: 12%;
+    transform: translateX(-50%);
+
+    padding: 15px 34px;
+    min-width: 190px;
+
+    border: 1px solid rgba(255,255,255,.8);
+    border-radius: 50px;
+
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.9),
+        rgba(247,219,174,.95)
+    );
+
+    color: #7b5735;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 0 15px rgba(255,225,170,.7),
+        0 8px 30px rgba(60,40,20,.25);
+
+    animation: buttonGlow 2.2s ease-in-out infinite;
+    transition: all .5s ease;
+}
+
+@keyframes buttonGlow {
+    0%,100% {
+        box-shadow:
+            0 0 15px rgba(255,225,170,.6),
+            0 8px 30px rgba(60,40,20,.2);
+    }
+
+    50% {
+        box-shadow:
+            0 0 30px rgba(255,235,180,1),
+            0 8px 35px rgba(60,40,20,.3);
+    }
+}
+
+.open-button:hover {
+    transform: translateX(-50%) scale(1.05);
+}
+
+.opening.open .open-button {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* KELopak MAWAR */
+.petals {
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.petal {
+    position: absolute;
+    top: -30px;
+    width: 14px;
+    height: 20px;
+    background: #e7a9ad;
+    border-radius: 80% 20% 80% 20%;
+    opacity: .8;
+
+    animation:
+        fall linear infinite,
+        sway ease-in-out infinite alternate;
+}
+
+.petal:nth-child(1) { left: 8%; animation-duration: 7s, 2s; }
+.petal:nth-child(2) { left: 20%; animation-duration: 9s, 3s; animation-delay: 1s; }
+.petal:nth-child(3) { left: 35%; animation-duration: 8s, 2.5s; animation-delay: 2s; }
+.petal:nth-child(4) { left: 52%; animation-duration: 10s, 3s; animation-delay: .5s; }
+.petal:nth-child(5) { left: 68%; animation-duration: 7s, 2s; animation-delay: 1.5s; }
+.petal:nth-child(6) { left: 82%; animation-duration: 9s, 2.5s; animation-delay: 3s; }
+.petal:nth-child(7) { left: 92%; animation-duration: 8s, 3s; animation-delay: 2s; }
+
+@keyframes fall {
+    from {
+        transform: translateY(-30px) rotate(0deg);
+    }
+    to {
+        transform: translateY(110vh) rotate(360deg);
+    }
+}
+
+@keyframes sway {
+    from {
+        margin-left: -20px;
+    }
+    to {
+        margin-left: 20px;
+    }
+}
+
+/* SPARKLES */
+.sparkles {
+    position: absolute;
+    inset: 0;
+    z-index: 16;
+    pointer-events: none;
+}
+
+.spark {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 12px 4px rgba(255,235,180,.9);
+    animation: sparkle 2.5s ease-in-out infinite;
+}
+
+.spark:nth-child(1) { left: 15%; top: 30%; }
+.spark:nth-child(2) { left: 30%; top: 65%; animation-delay: .7s; }
+.spark:nth-child(3) { left: 70%; top: 28%; animation-delay: 1.2s; }
+.spark:nth-child(4) { left: 85%; top: 60%; animation-delay: .3s; }
+.spark:nth-child(5) { left: 48%; top: 20%; animation-delay: 1.7s; }
+
+@keyframes sparkle {
+    0%,100% {
+        opacity: 0;
+        transform: scale(.5);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+    }
+}
+
+/* SETELAH TERBUKA */
+.opening.open .intro {
+    opacity: 0;
+    transform: translateY(-30px);
+}
+
+/* TRANSISI KE HALAMAN BERIKUTNYA */
+.fade-next {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    background: #fff8ed;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.5s ease;
+}
+
+.opening.finish .fade-next {
+    opacity: 1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="opening" id="opening">
+
+    <!-- GANTI DENGAN GAMBAR KASTIL KAMU -->
+    <img src="kastil.jpg" class="castle">
+
+    <div class="magic-light"></div>
+
+    <!-- GERBANG -->
+    <div class="gate-wrapper">
+
+        <!-- GANTI gerbang.png DENGAN GAMBAR GERBANG KAMU -->
+        <img src="gerbang.png" class="gate gate-left">
+        <img src="gerbang.png" class="gate gate-right">
+
+        <div class="portal-light"></div>
+
+    </div>
+
+    <!-- TEKS -->
+    <div class="intro">
+        <small>A Magical Journey Begins…</small>
+    </div>
+
+    <!-- KELOPAK -->
+    <div class="petals">
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+    </div>
+
+    <!-- SPARKLES -->
+    <div class="sparkles">
+        <span class="spark"></span>
+        <span class="spark"></span>
+        <span class="spark"></span>
+        <span class="spark"></span>
+        <span class="spark"></span>
+    </div>
+
+    <!-- TOMBOL -->
+    <button class="open-button" id="openButton">
+        BUKA UNDANGAN
+    </button>
+
+    <!-- TRANSISI -->
+    <div class="fade-next"></div>
+
+</div>
+
+<script>
+
+const opening = document.getElementById("opening");
+const button = document.getElementById("openButton");
+
+button.addEventListener("click", function() {
+
+    // membuka gerbang
+    opening.classList.add("open");
+
+    // tunggu gerbang terbuka
+    setTimeout(function() {
+
+        // transisi menuju halaman berikutnya
+        opening.classList.add("finish");
+
+    }, 3000);
+
+});
+
+</script>
+
+</body>
+  </html>
